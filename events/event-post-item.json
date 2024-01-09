@@ -1,0 +1,6 @@
+{
+    "httpMethod": "POST",
+    "body": "{\"ingredient_name\": \"TestItem\", \"quantity\": 60}",
+    "path": "/stock"
+}
+  

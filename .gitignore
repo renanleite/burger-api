@@ -1,0 +1,23 @@
+# Node.js dependencies
+node_modules/
+
+# SAM build artifacts
+.aws-sam/
+
+# AWS SAM local debugging files
+.vscode/
+
+# Serverless Framework
+.serverless/
+
+# Lambda function deployment packages
+*.zip
+
+# IDE files
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Logs
+*.log
+logs/

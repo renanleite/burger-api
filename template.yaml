@@ -1,0 +1,91 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  burger-api
+Transform:
+  - AWS::Serverless-2016-10-31
+
+Resources:
+  getStockFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/stock/get-stock.getStockHandler
+      Runtime: nodejs20.x
+      Architectures:
+        - x86_64
+      Timeout: 100
+      Description: HTTP get method to get all items from stock table.
+      Policies:
+        # TODO: give crud policies to postgres db
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /stock
+            Method: GET
+
+  addItemStockFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/stock/add-item-stock.addItemStockHandler
+      Runtime: nodejs20.x
+      Architectures:
+        - x86_64
+      Timeout: 100
+      Description: HTTP post method to add one item to the stock table.
+      Policies:
+        # TODO: give crud policies to postgres db
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /stock
+            Method: POST
+  
+  deleteItemStockFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/stock/delete-item-stock.deleteItemStockHandler
+      Runtime: nodejs20.x
+      Architectures:
+        - x86_64
+      Timeout: 100
+      Description: HTTP delete method to delete one item from the stock table.
+      Policies:
+        # TODO: give crud policies to postgres db
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /stock/{id}
+            Method: DELETE
+
+  MyDb:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      Engine: postgres
+      DBInstanceIdentifier: burger-db
+      MasterUsername: postgres
+      MasterUserPassword: 123456789
+      AllocatedStorage: 20
+      DBInstanceClass: db.t2.micro
+      PubliclyAccessible: true
+      DBName: burger_db
+
+
+Outputs:
+  WebEndpoint:
+    Description: API Gateway endpoint URL for Prod stage
+    # Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+
+Globals:
+  Function:
+    LoggingConfig:
+      LogFormat: JSON
+    Runtime: nodejs20.x
+    Environment:
+      Variables:
+        PG_USER: postgres
+        PG_HOST: burger-db.ctc26gwyiewv.sa-east-1.rds.amazonaws.com
+        PG_DATABASE: burger_db
+        PG_PASSWORD: 123456789
+        PG_PORT: 5432
